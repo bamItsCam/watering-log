@@ -2,8 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
  
-import Log from '../imports/pages/log.jsx';
+import App from '../imports/App.jsx';
  
 Meteor.startup(() => {
-  render(<Log/>, document.getElementById('render-target'));
+  render(<App/>, document.getElementById('render-target'));
 });

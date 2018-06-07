@@ -7,24 +7,29 @@ export const logEntriesDB = new Mongo.Collection('logEntries');
 if(Meteor.isServer) {
 	Meteor.publish('logEntries', function wateringLogPublication() {
 		return logEntriesDB.find();
-	})
+	});
 }
 
 Meteor.methods({
-	'logEntries.updateEntry'(entryId, entryTitle, entryMessage) {
+	'logEntries.updateEntry'(entryId, entryAuthor, entryTitle, entryMessage) {
 		logEntriesDB.update(entryId, {
 			$set: {
 				title: entryTitle,
 				message: entryMessage,
 			}
-		})
+		});
 
 	},
-	'logEntries.addNewBlankEntry'() {
+	'logEntries.addEntry'(entryAuthor, entryNotes, entryDate, entryTime) {
 		logEntriesDB.insert({
-			title: '',
-			message: '',
+			author: entryAuthor,
+			notes: entryNotes,
+			date: entryDate,
+			time: entryTime,
 			createdAt: new Date(),
-		})
+		});
+	},
+	'logEntries.deleteEntry'(entryId) {
+		logEntriesDB.remove(entryId);
 	}
 })

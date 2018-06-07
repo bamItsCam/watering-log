@@ -1,2 +1,28 @@
-@import "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css";
 @import "https://use.fontawesome.com/releases/v5.0.6/css/all.css";
+
+.modal-card {
+	width:712px;
+}
+
+.modal-card-body {
+	min-height: 400px;
+}
+
+#formNotes {
+	min-height: 300px;
+}
+
+.display {
+	margin-top: 12px;
+	position: fixed;
+	display: block;
+	z-index: 2;
+}
+
+.no-display {
+	display: none;
+}
+
+.accordion-header {
+	background-color: rgb(129, 167, 190) !important;
+}

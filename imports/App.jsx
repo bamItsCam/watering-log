@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { Component } from 'react';
 
-const App = props => {
-  return props.content
+class App extends Component {
+    render() {
+        const {content} = this.props;
+        return (
+        <div>
+        	{content}
+        </div>
+        );
+    }
 }
 
-export default App
+export default App;

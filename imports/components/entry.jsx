@@ -37,7 +37,7 @@ class Entry extends Component {
 	}
 
 	toggleExpandedNotes = () => {
-		accordionObj = ReactDOM.findDOMNode(this.refs[this.props.id]);
+		var accordionObj = ReactDOM.findDOMNode(this.refs[this.props.id]);
 		if(accordionObj.classList.contains('is-active')) {
 			//it must be expanded, therefore minimize it
 			accordionObj.classList.remove('is-active');

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import BigCalendar from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+
 
 BigCalendar.momentLocalizer(moment);
 
-class Calendar extends Component {
+class Scheduler extends Component {
 	render() {
 		return (
 			<div>
@@ -20,4 +22,4 @@ class Calendar extends Component {
 	}
 }
 
-export default Calendar;
+export default Scheduler;

@@ -108,7 +108,7 @@ class Log extends Component {
 									      <i className="fas fa-calendar"></i>
 									    </span>
 											<input className="input" type="text" onClick={this.toggleDisplayDate} onChange={this.onDateChange} value={this.state.formMoment.locale("en").format("MMM DD, YYYY")}/>
-											<DatePicker
+											<Calendar
 												className={this.state.dateDisplayClass}
 												calendarType="US"
 												onChange={this.onDateChange}

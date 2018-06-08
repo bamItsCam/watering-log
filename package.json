@@ -5,14 +5,14 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.49",
+    "@babel/runtime": "^7.0.0-beta.36",
     "bulma": "^0.7.1",
     "bulma-accordion": "^1.0.1",
+    "meteor-node-stubs": "^0.3.2",
     "moment": "^2.22.2",
-    "react": "15.6.2",
+    "react": "^16.4.0",
     "react-big-calendar": "^0.19.1",
     "react-calendar": "^2.15.1",
-    "react-dom": "15.6.2",
-    "react-mounter": "^1.2.0"
+    "react-dom": "^16.4.0"
   }
 }

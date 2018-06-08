@@ -3,8 +3,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mount } from 'react-mounter';
 
 import App from '/imports/App.jsx';
-import Log from '/imports/pages/log.jsx';
-import Calendar from '/imports/pages/calendar.jsx';
+import Log from '/imports/pages/Log.jsx';
+import Calendar from '/imports/pages/Calendar.jsx';
 
 FlowRouter.route('/', {
   name: 'Log',

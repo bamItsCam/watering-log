@@ -4,15 +4,9 @@ import { logEntriesDB } from '../api/logEntries.jsx'
 import { withTracker } from 'meteor/react-meteor-data';
 
 import moment from 'moment';
-import 'react-dates/lib/css/_datepicker.css';
-import 'react-dates/initialize';
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
-
 import Calendar from 'react-calendar';
 
 import Entry from '../components/Entry.jsx';
-import EntryForm from '../components/EntryForm.jsx';
-
 
 class Log extends Component {
 	constructor(props) {
@@ -114,7 +108,7 @@ class Log extends Component {
 									      <i className="fas fa-calendar"></i>
 									    </span>
 											<input className="input" type="text" onClick={this.toggleDisplayDate} onChange={this.onDateChange} value={this.state.formMoment.locale("en").format("MMM DD, YYYY")}/>
-											<Calendar
+											<DatePicker
 												className={this.state.dateDisplayClass}
 												calendarType="US"
 												onChange={this.onDateChange}

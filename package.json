@@ -13,6 +13,7 @@
     "react": "^16.4.0",
     "react-big-calendar": "^0.19.1",
     "react-calendar": "^2.15.1",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.0",
+    "react-router-dom": "^4.3.1"
   }
 }

@@ -6,7 +6,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import Calendar from 'react-calendar';
 
-import Entry from '../components/Entry.jsx';
+import Entry from '../components/entry.jsx';
 
 class Log extends Component {
 	constructor(props) {

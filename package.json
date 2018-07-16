@@ -10,6 +10,7 @@
     "bulma-accordion": "^1.0.1",
     "meteor-node-stubs": "^0.3.2",
     "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
     "react": "^16.4.0",
     "react-big-calendar": "^0.19.1",
     "react-calendar": "^2.15.1",

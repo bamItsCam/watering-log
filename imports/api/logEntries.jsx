@@ -1,16 +1,33 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 
 export const logEntriesDB = new Mongo.Collection('logEntries');
 
 if(Meteor.isServer) {
-	Meteor.publish('logEntries', function wateringLogPublication() {
-		return logEntriesDB.find();
+	Meteor.publish('paginatedEntries', function(pageSize, skipAmount) {
+ 		check(pageSize, Match.Integer)
+ 		check(skipAmount, Match.Integer)
+ 		// TODO: range check the skipAmount
+		return logEntriesDB.find({}, {
+			sort: { 
+				date: -1,
+				createdAt: -1,
+			},
+			limit: pageSize,
+			skip: skipAmount,
+		});
 	});
+
+	Meteor.publish('allEntries', function() {
+		return logEntriesDB.find();	
+	})
 }
 
 Meteor.methods({
+	'logEntries.count'() {
+		return logEntriesDB.find().count();
+	},
 	'logEntries.updateEntry'(entryId, entryAuthor, entryTitle, entryMessage) {
 		logEntriesDB.update(entryId, {
 			$set: {

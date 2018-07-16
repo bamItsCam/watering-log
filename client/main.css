@@ -4,7 +4,7 @@
 	width:712px;
 }
 
-.modal-card-body {
+.tall-modal {
 	min-height: 400px;
 }
 
@@ -23,6 +23,7 @@
 	display: none;
 }
 
-.accordion-header {
-	background-color: rgb(129, 167, 190) !important;
+.adjacent-buttons {
+	margin-left: 6px;
+	margin-right: 6px;
 }

@@ -1,168 +1,101 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { logEntriesDB } from '../api/logEntries.jsx'
+
 import { withTracker } from 'meteor/react-meteor-data';
+import { Tracker } from 'meteor/tracker'
 
-import moment from 'moment';
-import Calendar from 'react-calendar';
-
-import Entry from '../components/entry.jsx';
+import LogList from '../components/logList.jsx';
 
 class Log extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			formClass: "modal",
-			formMoment: moment(new Date()),
-			dateDisplayClass: "no-display",
-			amOrPm: "PM",
-		}
+			currentPage: 1,
+			pageSize: 5,
+			entriesTotal: 0,
+		};
+		this.availablePageSizes = [1,5,10,20,50];
 	}
 
 	render() {
 		return (
 			<div>
-				{this.renderForm()}
-				<div className="field">
-					<a className="button is-success" onClick={this.displayForm}>
-						<span className="icon is-small">
-							<i className="fas fa-plus"></i>
-						</span>
-					</a>
-				</div>
-				<div className="accordions">
-				  {this.renderAccordionLog()}
-				</div>
+				<div className="select">
+			      <select
+			      	value={this.state.pageSize}
+			      	onChange={this.handlePageSizeDropdown}
+			      >
+			      	<option value={1}>1</option>
+			      	<option value={5}>5</option>
+			      	<option value={10}>10</option>
+			      </select>
+			    </div>
+				<LogList pageSize={this.state.pageSize} currentPage={this.state.currentPage} entriesTotal={this.state.entriesTotal}/>
+				{this.renderPagination()}
 			</div>
 		);
 	}
 
-	renderAccordionLog() {
-		return this.props.logEntries.map((entry) => (
-			<Entry key={entry._id} id={entry._id} entry={entry} />
+	renderPageOptions() {
+		return this.availablePageSizes.map( size => (
+			<option key={size} value={size}>{size}</option>
 		));
 	}
 
-	displayForm = () => {
-		// mark the modal form class with the 'is-active' class to display it
-		this.setState({"formClass":"modal is-active"})
-	}
-
-	exitForm = () => {
-		this.setState({"formClass":"modal"})
-		this.clearForm()
-	}
-
-	clearForm = () => {
-		ReactDOM.findDOMNode(this.refs.logEntryForm).reset();
-	}
-
-	addEntry = () => {
-		const author = ReactDOM.findDOMNode(this.refs.formAuthor).value.trim();
-		const notes = ReactDOM.findDOMNode(this.refs.formNotes).value.trim();
-		const date = this.state.formMoment.locale("en").format("MMM DD, YYYY");
-		const time = this.state.amOrPm;
-		Meteor.call('logEntries.addEntry', author, notes, date, time);
-		this.exitForm();
-	}
-
-	onDateChange = (date) => {
-		this.setState({"formMoment": moment(date)});
-		this.noDisplayDate();
-	}
-
-	toggleDisplayDate = () => {
-		if (this.state.dateDisplayClass == "no-display") {
-			this.displayDate();
-		}
-		else {
-			this.noDisplayDate();
-		}
-	}
-
-	displayDate = () => this.setState({"dateDisplayClass": "display"});
-
-	noDisplayDate = () => this.setState({"dateDisplayClass": "no-display"});
-
-	handleAmPmDropdown = (event) => {
-		console.log(event.target);
-		this.setState({"amOrPm": event.target.value});
-	}
-
-	renderForm() {
+	renderPagination() {
 		return (
-			<div className={this.state.formClass}>
-				<div className="modal-background"></div>
-				<div className="modal-card">
-					<header className="modal-card-head">
-						<p className="modal-card-title">New Log Entry</p>
-						<button className="delete" aria-label="close" onClick={this.exitForm}></button>
-					</header>
-					<section className="modal-card-body">
-						<form ref="logEntryForm">
-							<div className="field is-horizontal">
-								<div className="field-body">
-									<div className="field">
-										<div className="control has-icons-left">
-											<span className="icon is-small is-left">
-									      <i className="fas fa-calendar"></i>
-									    </span>
-											<input className="input" type="text" onClick={this.toggleDisplayDate} onChange={this.onDateChange} value={this.state.formMoment.locale("en").format("MMM DD, YYYY")}/>
-											<Calendar
-												className={this.state.dateDisplayClass}
-												calendarType="US"
-												onChange={this.onDateChange}
-												value={this.state.formMoment.toDate()}
-											/>
-										</div>
-									</div>
-									<div className="field">
-									  <div className="control has-icons-left">
-									  	<span className="icon is-small is-left">
-									      <i className="fas fa-clock"></i>
-									    </span>
-									    <div className="select">
-									      <select
-									      	value={this.state.amOrPm}
-									      	onChange={this.handleAmPmDropdown}
-									      >
-									        <option value="AM">AM</option>
-									        <option value="PM">PM</option>
-									      </select>
-									    </div>
-									  </div>
-									</div>
-									<div className="field">
-									  <div className="control has-icons-left is-expanded">
-									  	<span className="icon is-small is-left">
-									      <i className="fas fa-user"></i>
-									    </span>
-									    <input ref="formAuthor" className="input" type="text" placeholder="Author"/>
-									  </div>
-									</div>
-								</div>
-							</div>
-							<div className="field">
-							  <div className="control">
-							    <textarea id="formNotes" ref="formNotes" className="textarea" placeholder="Notes"></textarea>
-							  </div>
-							</div>
-						</form>
-					</section>
-					<footer className="modal-card-foot">
-			      <button className="button is-success" onClick={this.addEntry}>Save changes</button>
-			      <button className="button" onClick={this.exitForm}>Cancel</button>
-			    </footer>
-				</div>
-				
-			</div>
+			<nav className="pagination" role="navigation" aria-label="pagination">
+			  <ul className="pagination-list">
+			    <li>
+			      <a className="pagination-link" aria-label="Go back" onClick={this.goBack} disabled={this.isPrevDisabled()}>Back</a>
+			    </li>
+			    <li>
+			      <a className="pagination-link is-current" aria-label="Page Current" aria-current="page" disabled>page {this.state.currentPage} of {Math.ceil(this.state.entriesTotal/this.state.pageSize)}</a>
+			    </li>
+			    <li>
+			      <a className="pagination-link" aria-label="Goto Next" onClick={this.goNext} disabled={this.isNextDisabled()}>Next</a>
+			    </li>
+			  </ul>
+			</nav>
 		)
+	}
+
+	handlePageSizeDropdown = (event) => {
+		this.setState({"pageSize": parseInt(event.target.value)});
+	}
+
+	isNextDisabled() {
+		// Math!
+		return (this.state.currentPage * this.state.pageSize >= this.state.entriesTotal)
+	}
+
+	isPrevDisabled() {
+		return (this.state.currentPage <= 1)
+	}
+
+	goBack = () => {
+		if (! this.state.isFirstPage) { 
+			this.setState({"currentPage": this.state.currentPage - 1})
+		}
+	}
+
+	goNext = () => {
+		if (! this.state.isLastPage) { 
+			this.setState({"currentPage": this.state.currentPage + 1})
+		}
+	}
+
+	componentDidMount() {
+		const componentThis = this
+		Tracker.autorun(() => {
+			Meteor.call('logEntries.count', function(error, result) {
+				componentThis.setState({"entriesTotal": result})
+			})
+		})
 	}
 }
 
-export default withTracker(() => {
-	Meteor.subscribe('logEntries');
-	return {
-		logEntries: logEntriesDB.find({}, { sort: { createdAt: -1 } }).fetch(),
-	}
-})(Log);
+export default withTracker((props) => {
+	return {}
+})(Log)
